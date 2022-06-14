@@ -26,4 +26,4 @@ for i in range(lenth):
 	random.shuffle(A)
 	b = random.choice(A)
 	password = password + b
-print(f"Your password is,   {password}")
+print(f"Your password is,    {password}")
