@@ -62,11 +62,17 @@ def passgen():
 					print("[Normal] What do you want to exclude? [Tip: Just pressing enter will exclude nothing] (Write the symbols, numbers or letters you want to exclude and do NOT put any spaces between them)\n")
 					A.sort()
 					for i in A:
-						print(i, end=" ")
+						print(i, end = " ")
 					remove = input("\n\n")
 					for i in remove:
 						A.remove(i)
 						recovery += i
+					if A == []:
+						for i in recovery:
+							A.append(i)
+							recovery = ""
+						print("[Normal] You can't exclude everything\n")
+						continue
 					break
 				except ValueError:
 					if recovery != "":
@@ -147,11 +153,17 @@ def passgen():
 						print("[Full] What do you want to exclude? [Tip: Just pressing enter will exclude nothing] (Write the symbols, numbers or letters you want to exclude and do NOT put any spaces between them)\n")
 						A.sort()
 						for i in A:
-							print(i, end=" ")
+							print(i, end = " ")
 						remove = input("\n\n")
 						for i in remove:
 							A.remove(i)
 							recovery += i
+						if A == []:
+							for i in recovery:
+								A.append(i)
+								recovery = ""
+							print("[Full] You can't exclude everything\n")
+							continue
 						break
 					except ValueError:
 						if recovery != "":
@@ -219,11 +231,17 @@ def passgen():
 							print(f"[Full] {position} password: What do you want to exclude? [Tip: Just pressing enter will exclude nothing] (Write the symbols, numbers or letters you want to exclude and do NOT put any spaces between them)\n")
 							A.sort()
 							for i in A:
-								print(i, end=" ")
+								print(i, end = " ")
 							remove = input("\n\n")
 							for i in remove:
 								A.remove(i)
 								recovery += i
+							if A == []:
+								for i in recovery:
+									A.append(i)
+									recovery = ""
+								print("[Full] You can't exclude everything\n")
+								continue
 							break
 						except ValueError:
 							if recovery != "":
@@ -246,9 +264,9 @@ def passgen():
 		place = 0
 		while True:
 			custom = ""
-			print('[Custom] Please enter symbols, numbers or letters that will be used to generate passwords (Please do NOT put any spaces between them)\n[Hint: Enter "nums" to add the default numbers or Enter "syms" to add the default special characters or Enter "lows" to add the default lowercase letters or Enter "ups" to add the default uppercase letters OR Enter "def" to add all the default letters, numbers and symbols and lastly enter "clear" to clear what you have added and make sure to enter all of them in lowercase\nJust press enter if your done]\n')
+			print('[Custom] Please enter symbols, numbers, or letters that will be used to generate passwords (please do NOT put any spaces between them)\n[Enter "nums" to add the default numbers; "syms" to add the default special characters; "lows" to add the default lowercase letters; "ups" to add the default uppercase letters; "def" to add all the default letters, numbers, and symbols; and "cl" to clear what you\'ve added; make sure to enter everything in lowercase]\n[Just press enter when you\'re done]\n')
 			for i in A:
-				print(i, end=" ")
+				print(i, end = " ")
 			print("\n")
 			custom = input()
 			print("\n")
@@ -279,7 +297,7 @@ def passgen():
 				for i in custom:
 					A.append(i)
 			elif " " in custom:
-				print("[Custom] Do NOT enter any spaces\n")
+				print("[Custom] Please do NOT enter any spaces\n")
 			elif A == []:
 				print("[Custom] Please enter at least one symbol, number or letter\n")
 			else:
@@ -321,11 +339,17 @@ def passgen():
 					try:
 						print("[Custom] What do you want to exclude? [Tip: Just pressing enter will exclude nothing] (Write the symbols, numbers or letters you want to exclude and do NOT put any spaces between them)\n")
 						for i in A:
-							print(i, end=" ")
+							print(i, end = " ")
 						remove = input("\n\n")
 						for i in remove:
 							A.remove(i)
 							recovery += i
+						if A == []:
+							for i in recovery:
+								A.append(i)
+								recovery = ""
+							print("[Custom] You can't exclude everything\n")
+							continue
 						break
 					except ValueError:
 						if recovery != "":
@@ -354,7 +378,7 @@ def passgen():
 					position = "3rd"
 				else:
 					position = f"{place}th"
-				A = []
+				borrow = A.copy()
 				while True:
 					try:
 						lenth = int(input(f"[Custom] {position} password: How many characters do you want in your password?\n"))
@@ -370,18 +394,24 @@ def passgen():
 					while True:
 						try:
 							print(f"[Custom] {position} password: What do you want to exclude? [Tip: Just pressing enter will exclude nothing] (Write the symbols, numbers or letters you want to exclude and do NOT put any spaces between them)\n")
-							A.sort()
-							for i in A:
-								print(i, end=" ")
+							borrow.sort()
+							for i in borrow:
+								print(i, end = " ")
 							remove = input("\n\n")
 							for i in remove:
-								A.remove(i)
+								borrow.remove(i)
 								recovery += i
+							if borrow == []:
+								for i in recovery:
+									borrow.append(i)
+									recovery = ""
+								print("[Custom] You can't exclude everything\n")
+								continue
 							break
 						except ValueError:
 							if recovery != "":
 								for i in recovery:
-									A.append(i)
+									borrow.append(i)
 								recovery = ""
 							if remove == "":
 								break
@@ -389,8 +419,8 @@ def passgen():
 								print("[Custom] {position} password: Please enter only valid symbols, numbers or letters or just press enter to exclude nothing\n")
 				password = ""
 				for i in range(lenth):
-					shuffle(A)
-					B = choice(A)
+					shuffle(borrow)
+					B = choice(borrow)
 					password += B
 				passwords.append(password)
 	returns = ""
@@ -408,7 +438,7 @@ def passgen():
 		else:
 			print("Please choose a valid Mode\n")
 	while True:
-		returns = input('Do you want to Print(P) the passwords here or put in in a File(F) or do Both(B) Print the passwords here and put the passwords in a file? [Tip: Just tapping enter will return the passwords from the "passgen()" fuction]\n').lower()
+		returns = input('Do you want to Print(P) the passwords here or put in a File(F) or do Both(B) Print the passwords here and put the passwords in a file? [Tip: Just tapping enter will return the passwords from the "passgen()" function]\n').lower()
 		if returns == "":
 			return passwords
 			break
@@ -423,7 +453,7 @@ def passgen():
 				if write == "project" or write == "p" or write.startswith("p"):
 					name = input("Write the name of the file\n")
 					if " " in name[0] or " " in name[-1] or "\\" in name or "/" in name:
-						print("Please don't put any space at first and last of the name and don't put any \\ and / in name\n")
+						print("Please don't put any space at the beginning and end of the name, and don't put any \"\\\" or \"/\" in the name\n")
 						continue
 					elif exists(name) and isdir(name):
 						print("A directory already exist with that name\n")
@@ -473,7 +503,7 @@ def passgen():
 							backup = passwords[0]
 							with open(name, "w") as file:
 								file.write(passwords[0])
-								passwords.remove(passwords[0])
+								passwords.pop(0)
 							with open(name, "a") as file:
 								for i in passwords:
 									file.write(f"\n\n{i}")
@@ -496,14 +526,14 @@ def passgen():
 							print("Please enter a valid Location\n")
 							continue
 						elif location[-1] != "/" and location[-1] != "\\":
-							print("Please add \ or / at the end according to your device\n")
+							print('Please add "\\" or "/" at the end according to your device\n')
 							continue
 						else:
 							break
 					while True:
 						name = input("Please enter the name of the file\n")
 						if " " in name[0] or " " in name[-1] or "\\" in name or "/" in name:
-							print("Please don't put any space at first and last of the name and don't put any \\ and / in name\n")
+							print("Please don't put any space at the beginning and end of the name, and don't put any \"\\\" or \"/\" in the name\n")
 							continue
 						name = location + name
 						if exists(name) and isdir(name):
@@ -517,7 +547,7 @@ def passgen():
 										backup = passwords[0]
 										with open(name, "w") as file:
 											file.write(passwords[0])
-											passwords.remove(passwords[0])
+											passwords.pop(0)
 										with open(name, "a") as file:
 											for i in passwords:
 												file.write(f"\n\n{i}")
@@ -554,7 +584,7 @@ def passgen():
 								backup = passwords[0]
 								with open(name, "w") as file:
 									file.write(passwords[0])
-									passwords.remove(passwords[0])
+									passwords.pop(0)
 								with open(name, "a") as file:
 									for i in passwords:
 										file.write(f"\n\n{i}")
@@ -580,7 +610,7 @@ def passgen():
 				if write == "project" or write == "p" or write.startswith("p"):
 					name = input("Write the name of the file\n")
 					if " " in name[0] or " " in name[-1] or "\\" in name or "/" in name:
-						print("Please don't put any space at first and last of the name and don't put any \\ and / in name\n")
+						print("Please don't put any space at the beginning and end of the name, and don't put any \"\\\" or \"/\" in the name\n")
 						continue
 					elif exists(name) and isdir(name):
 						print("A directory already exist with that name\n")
@@ -593,7 +623,7 @@ def passgen():
 									backup = passwords[0]
 									with open(name, "w") as file:
 										file.write(passwords[0])
-										passwords.remove(passwords[0])
+										passwords.pop(0)
 									with open(name, "a") as file:
 										for i in passwords:
 											file.write(f"\n\n{i}")
@@ -630,7 +660,7 @@ def passgen():
 							backup = passwords[0]
 							with open(name, "w") as file:
 								file.write(passwords[0])
-								passwords.remove(passwords[0])
+								passwords.pop(0)
 							with open(name, "a") as file:
 								for i in passwords:
 									file.write(f"\n\n{i}")
@@ -653,14 +683,14 @@ def passgen():
 							print("Please enter a valid Location\n")
 							continue
 						elif location[-1] != "/" and location[-1] != "\\":
-							print("Please add \ or / at the end according to your device\n")
+							print('Please add "\\" or "/" at the end according to your device\n')
 							continue
 						else:
 							break
 					while True:
 						name = input("Please enter the name of the file\n")
 						if " " in name[0] or " " in name[-1] or "\\" in name or "/" in name:
-							print("Please don't put any space at first and last of the name and don't put any \\ and / in name\n")
+							print("Please don't put any space at the beginning and end of the name, and don't put any \"\\\" or \"/\" in the name\n")
 							continue
 						name = location + name
 						if exists(name) and isdir(name):
@@ -674,7 +704,7 @@ def passgen():
 										backup = passwords[0]
 										with open(name, "w") as file:
 											file.write(passwords[0])
-											passwords.remove(passwords[0])
+											passwords.pop(0)
 										with open(name, "a") as file:
 											for i in passwords:
 												file.write(f"\n\n{i}")
@@ -711,7 +741,7 @@ def passgen():
 								backup = passwords[0]
 								with open(name, "w") as file:
 									file.write(passwords[0])
-									passwords.remove(passwords[0])
+									passwords.pop(0)
 								with open(name, "a") as file:
 									for i in passwords:
 										file.write(f"\n\n{i}")
