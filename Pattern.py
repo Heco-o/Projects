@@ -1,12 +1,28 @@
 print("Please Wait....")
 
-import sympy
+import subprocess
+try:
+	import sympy
+except ModuleNotFoundError as E:
+	print(E)
+	down = input("To run this file you will need to download simply module\nDo you want to download sympy module? (Y/n)\n").lower()
+	if down.startswith("y"):
+		print("Downloading...")
+		subprocess.run(["pip3", "install", "sympy"])
+	else:
+		print("You can download sympy module by pip in terminal, for example:\npip install sympy\nor\npip3 install sympy")
+	exit()
+import decimal
 
 def diff(x):
 	d = []
 	v = []
-	for i in range(len(x) - 1):
-		d.append(x[i + 1] - x[i])
+	if ints:
+		for i in range(len(x) - 1):
+			d.append(x[i + 1] - x[i])
+	else:
+		for i in range(len(x) - 1):
+			d.append(sympy.Rational(str(float(decimal.Decimal(str(eval(str(x[i + 1])))) - decimal.Decimal(str(eval(str(x[i]))))))))
 	for i in range(len(d) - 1):
 		if d[i] == d[i + 1]:
 			v.append(True)
@@ -27,22 +43,30 @@ def create(n, x, d):
 
 print("Done!\n")
 
+ints = True
 inputs = []
 temp = input("Enter a pattern:\n").split(" ")
 
-if "" in temp:
-	print("Numbers only")
-	exit()
 if len(temp) <= 1:
 	print("More than one number is required")
 	exit()
 
-for i in temp:
-	inputs.append(int(i))
+try:
+	for i in temp:
+		float(i)
+		if type(eval(i)) == float:
+			ints = False
+		inputs.append(eval(i))
+except ValueError:
+	print("Number only")
+	exit()
 
 del temp
 
-a = inputs[0]
+if ints:
+	a = inputs[0]
+else:
+	a = sympy.Rational(str(inputs[0]))
 diff_1, v, d1 = diff(inputs)
 formula = str(a) + " + " + str(d1) + " * (n - 1)"
 z = 1
@@ -58,8 +82,12 @@ test1 = str(sympy.sympify(formula, rational = True))
 formula = str(sympy.factor(formula))
 
 print("\nFirst 50 elements of the pattern above:")
-for n in range(1, 51):
-	print(int(eval(formula)), end = " ")
+if ints:
+	for n in range(1, 51):
+		print(int(eval(formula)), end = " ")
+else:
+	for n in range(1, 51):
+		print(eval(formula), end = " ")
 
 print("\n")
 
@@ -73,7 +101,9 @@ for i in range(1, z + 1):
 	else:
 		pos = str(i) + "th"
 	print(pos + " difference:")
-	eval("print(diff_" + str(i) + ")")
+	for j in eval("diff_" + str(i)):
+		print(eval(str(j)), end = " ")
+	print()
 
 print("\nFactor:\n" + formula)
 print("Expand:\n" + test0)
