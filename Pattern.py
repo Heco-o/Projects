@@ -5,7 +5,7 @@ try:
 	import sympy
 except ModuleNotFoundError as E:
 	print(E)
-	down = input("To run this file you will need to download simply module\nDo you want to download sympy module? (Y/n)\n").lower()
+	down = input("To run this file you will need to download simpy module\nDo you want to download sympy module? (Y/n)\n").lower()
 	if down.startswith("y"):
 		print("Downloading...")
 		subprocess.run(["pip3", "install", "sympy"])
