@@ -1,0 +1,14 @@
+body {
+	background-color: black;
+	color: white;
+}
+.red {
+	height: 250px;
+	width: 250px;
+	border-radius: 100%;
+	background-color: red;
+	animation-name: circles;
+	z-index: -1;
+	position: absolute;
+	filter: blur(150px);
+}
