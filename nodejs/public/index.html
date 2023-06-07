@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Termux Remote Control</title>
+</head>
+<body>
+	<h1>Termux Remote Control</h1>
+	<input type="text" id="commandInput" placeholder="Enter a command">
+	<button id="executeButton">Execute</button>
+	<pre id="outputArea"></pre>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.js"></script>
+	<script>
+		const socket = io();
+
+		const commandInput = document.getElementById('commandInput');
+		const executeButton = document.getElementById('executeButton');
+		const outputArea = document.getElementById('outputArea');
+
+		// Send command to the server
+		executeButton.addEventListener('click', () => {
+			const command = commandInput.value.trim();
+			if (command !== '') {
+				socket.emit('command', command);
+				commandInput.value = '';
+			}
+		});
+
+		// Receive command output from the server
+		socket.on('output', (output) => {
+			outputArea.textContent += output;
+		});
+	</script>
+</body>
+</html>
