@@ -1,21 +1,82 @@
 import itertools
+import json
+from collections import defaultdict
 total = {}
 ttt = ["xeeeeeeee", "xoeeeeeee", "xoxeeeeee", "xoxoeeeee", "xoxoxeeee", "xoxoxoeee", "xoxoxoxee", "xoxoxoxoe", "xoxoxoxox"]
 for i in range(len(ttt)):
-	z = sorted(list(set(itertools.permutations(ttt[i]))))
-	total[i] = z
-overall = []
-for i in total.values():
-	overall += i
-for i in range(len(overall)):
-	overall[i] = ((overall[i][0], overall[i][1], overall[i][2]),
-						 (overall[i][3], overall[i][4], overall[i][5]),
-						 (overall[i][6], overall[i][7], overall[i][8]))
+	total[i + 1] = tuple(sorted(["".join(i) for i in set(itertools.permutations(ttt[i]))]))
 
-overstr = f"{overall[0][0][0]} {overall[0][0][1]} {overall[0][0][2]}\n{overall[0][1][0]} {overall[0][1][1]} {overall[0][1][2]}\n{overall[0][2][0]} {overall[0][2][1]} {overall[0][2][2]}"
-overall.pop(0)
-for i in overall:
-	overstr += "\n\n" + f"{i[0][0]} {i[0][1]} {i[0][2]}\n{i[1][0]} {i[1][1]} {i[1][2]}\n{i[2][0]} {i[2][1]} {i[2][2]}"
-print(overstr)
-with open("positions", "w") as file:
-	file.write(overstr)
+states = {"impossible":0, "Xwin":0, "Owin":0, "draw":0, "incomplete":0}
+overall = {"impossible": defaultdict(list), "Xwin": defaultdict(list), "Owin": defaultdict(list), "draw": defaultdict(list), "incomplete": defaultdict(list)}
+
+for key, value in total.items():
+	for i in value:
+		x = 0
+		o = 0
+		if (i[0] == "x" and i[1] == "x" and i[2] == "x"):
+			x += 1
+		elif (i[0] == "o" and i[1] == "o" and i[2] == "o"):
+			o += 1
+		if (i[3] == "x" and i[4] == "x" and i[5] == "x"):
+			x += 1
+		elif (i[3] == "o" and i[4] == "o" and i[5] == "o"):
+			o += 1
+		if (i[6] == "x" and i[7] == "x" and i[8] == "x"):
+			x += 1
+		elif (i[6] == "o" and i[7] == "o" and i[8] == "o"):
+			o += 1
+		if (i[0] == "x" and i[3] == "x" and i[6] == "x"):
+			x += 1
+		elif (i[0] == "o" and i[3] == "o" and i[6] == "o"):
+			o += 1
+		if (i[1] == "x" and i[4] == "x" and i[7] == "x"):
+			x += 1
+		elif (i[1] == "o" and i[4] == "o" and i[7] == "o"):
+			o += 1
+		if (i[2] == "x" and i[5] == "x" and i[8] == "x"):
+			x += 1
+		elif (i[2] == "o" and i[5] == "o" and i[8] == "o"):
+			o += 1
+		if (i[0] == "x" and i[4] == "x" and i[8] == "x"):
+			x += 1
+		elif (i[0] == "o" and i[4] == "o" and i[8] == "o"):
+			o += 1
+		if (i[2] == "x" and i[4] == "x" and i[6] == "x"):
+			x += 1
+		elif (i[2] == "o" and i[4] == "o" and i[6] == "o"):
+			o += 1
+		if x == 0 and o == 0 and i.count("e") == 0:
+			states["draw"] += 1
+			overall["draw"][key].append(i)
+		elif x == 1 and o == 0:
+			if (9 - i.count("e")) % 2 == 1:
+				states["Xwin"] += 1
+				overall["Xwin"][key].append(i)
+			else:
+				states["impossible"] += 1
+				overall["impossible"][key].append(i)
+		elif x == 0 and o == 1:
+			if (9 - i.count("e")) % 2 == 0:
+				states["Owin"] += 1
+				overall["Owin"][key].append(i)
+			else:
+				states["impossible"] += 1
+				overall["impossible"][key].append(i)
+		elif x + o > 1:
+			states["impossible"] += 1
+			overall["impossible"][key].append(i)
+		else:
+			states["incomplete"] += 1
+			overall["incomplete"][key].append(i)
+
+for key, value in overall.items():
+	for i, j in value.items():
+		value[i] = tuple(sorted(j))
+	overall[key] = dict(value)
+
+print(overall["incomplete"])
+print(states)
+
+js = json.dumps(overall)
+with open("position.json", "w") as file:
+	file.write(js)
