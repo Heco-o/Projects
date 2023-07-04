@@ -4,7 +4,7 @@ from collections import defaultdict
 total = {}
 ttt = ["xeeeeeeee", "xoeeeeeee", "xoxeeeeee", "xoxoeeeee", "xoxoxeeee", "xoxoxoeee", "xoxoxoxee", "xoxoxoxoe", "xoxoxoxox"]
 for i in range(len(ttt)):
-	total[i + 1] = tuple(sorted(["".join(i) for i in set(itertools.permutations(ttt[i]))]))
+	total[i + 1] = sorted(["".join(j) for j in set(itertools.permutations(ttt[i]))])
 
 states = {"impossible":0, "Xwin":0, "Owin":0, "draw":0, "incomplete":0}
 overall = {"impossible": defaultdict(list), "Xwin": defaultdict(list), "Owin": defaultdict(list), "draw": defaultdict(list), "incomplete": defaultdict(list)}
@@ -45,7 +45,10 @@ for key, value in total.items():
 			x += 1
 		elif (i[2] == "o" and i[4] == "o" and i[6] == "o"):
 			o += 1
-		if x == 0 and o == 0 and i.count("e") == 0:
+		if x == 2:
+			states["Xwin"] += 1
+			overall["Xwin"][key].append(i)
+		elif x == 0 and o == 0 and i.count("e") == 0:
 			states["draw"] += 1
 			overall["draw"][key].append(i)
 		elif x == 1 and o == 0:
@@ -71,12 +74,13 @@ for key, value in total.items():
 
 for key, value in overall.items():
 	for i, j in value.items():
-		value[i] = tuple(sorted(j))
+		value[i] = sorted(j)
 	overall[key] = dict(value)
 
-print(overall["incomplete"])
+print(overall)
 print(states)
-
+"""
 js = json.dumps(overall)
-with open("position.json", "w") as file:
+with open("positions.json", "w") as file:
 	file.write(js)
+"""
