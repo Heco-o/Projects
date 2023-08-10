@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Python Function in HTML</title>
+</head>
+<body>
+    <label for="name">Enter your name:</label>
+    <input type="text" id="name" required><br>
+
+    <label for="age">Enter your age:</label>
+    <input type="number" id="age" required><br>
+
+    <button onclick="find()">Submit</button>
+    <h1 id="place"></h1>
+
+    <script>
+        function find() {
+            const nameInput = document.getElementById('name');
+            const ageInput = document.getElementById('age');
+            const userName = nameInput.value;
+            const userAge = ageInput.value;
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/find', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    const nosj = response.message;
+                    document.getElementById('place').innerText = nosj;
+                }
+            };
+            const data = JSON.stringify({ 'name': userName, 'age': userAge });
+            xhr.send(data);
+        }
+    </script>
+</body>
+</html>
