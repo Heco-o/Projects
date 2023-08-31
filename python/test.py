@@ -14,20 +14,20 @@ async def on_ready():
 async def on_message(message):
   user = str(message.author)
   
-  if message.content == "Heco!" and user == "Heco.":
-    await message.channel.send("Hi everyone my name is Heco and i was made by Heco. hehe")
+  if message.content == "Heco!" and user == "heco.#0":
+    await message.channel.send("Hi everyone my name is Heco and i was made by heco.#0 hehe")
   
-  if message.content == "Heco?" and user == "Heco.":
+  if message.content == "Heco?" and user == "heco.#0":
     await message.channel.send("Nah")
   
-  if message.content == "Start" and user == "Heco.":
+  if message.content == "Start" and user == "heco.#0":
     for i in range(40): await message.channel.send("E")
     
   await client.process_commands(message)
 
 @client.command()
 async def spam(ctx, amount=20, *, message="E"):
-  if str(ctx.author) == "Heco.":
+  if str(ctx.author) == "heco.#0":
     for i in range(amount): await ctx.channel.send(message)
 
 @client.command()
@@ -56,7 +56,7 @@ async def solve(ctx, *, x):
 
 @client.command()
 async def clear(ctx, amount=5):
-  if str(ctx.author) == "Heco." or str(ctx.author) == "Lane#6775":
+  if str(ctx.author) == "heco.#0" or str(ctx.author) == "lane6775#0":
     await ctx.channel.purge(limit=amount)
 
 @client.command()

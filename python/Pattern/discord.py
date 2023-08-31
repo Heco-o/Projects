@@ -97,7 +97,7 @@ while not v:
 	exec("diff_" + str(z + 1) + ", v, d" + str(z + 1) + " = diff(diff_" + str(z) + ")")
 	formula = create(z + 1, formula, eval("d" + str(z + 1)))
 	z += 1
-
+print(formula)
 test0 = str(sympy.expand(formula))
 test1 = str(sympy.sympify(formula, rational = True))
 
