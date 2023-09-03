@@ -1,5 +1,6 @@
-import time
+import argparse
 import threading
+import time
 
 stime = time.time()
 run = threading.Event()
@@ -14,6 +15,10 @@ def animate():
 
 animate = threading.Thread(target=animate)
 animate.start()
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-s", action="store_true")
+S = parser.parse_args().s
 
 try:
 	import sympy
@@ -34,7 +39,7 @@ def create(n, x, d):
 	for i in range(2, n + 2):
 		temp += f"*(n - {i})"
 		facto *= i
-	return f"{x} + (({d})*{temp})/{facto}"
+	return f"({x}) + (({d})*({temp}))/{facto}"
 
 run.clear()
 animate.join()
@@ -56,17 +61,24 @@ if len(inputs) <= 1:
 
 uni = {}
 uni["diff_0"], v, uni["d0"] = difference(inputs)
-formula = f"{inputs[0]} + ({uni['d0']})*(n - 1)"
+formula = f"({inputs[0]}) + ({uni['d0']})*(n - 1)"
 z = 1
 
 while not v:
 	uni["diff_"+str(z)], v, uni["d"+str(z)] = difference(uni["diff_"+str(z-1)])
 	formula = create(z, formula, uni["d"+str(z)])
 	z += 1
-#print(formula)
+
 expand = sympy.expand(formula)
 sympify = sympy.sympify(formula, rational = True)
 factor = sympy.factor(formula)
+
+if S:
+	SFormula = f"n*(({inputs[0]}) + ({formula}))/2"
+	
+	SExpand = sympy.expand(SFormula)
+	SSympify = sympy.sympify(SFormula, rational = True)
+	SFactor = sympy.factor(SFormula)
 
 print("\nFirst 50 elements of the pattern above:")
 for n in range(1, 51):
@@ -88,7 +100,10 @@ for i in range(z):
 		print(j, end = ", ")
 	print()
 
-print("\nFactor:\n" + str(factor).replace("**", "^").replace("*", ""))
-print("Expand:\n" + str(expand).replace("**", "^").replace("*", ""))
-print("Sympify:\n" + str(sympify).replace("**", "^").replace("*", ""))
+print("\nFactor:\n" + str(factor))
+if S: print(str(SFactor))
+print("Expand:\n" + str(expand))
+if S: print(str(SExpand))
+print("Sympify:\n" + str(sympify))
+if S: print(str(SSympify))
 print("\nFinished in " + str(time.time() - stime) + " seconds")
