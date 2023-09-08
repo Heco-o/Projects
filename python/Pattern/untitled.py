@@ -18,7 +18,9 @@ animate.start()
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-s", action="store_true")
-S = parser.parse_args().s
+parser.add_argument("-d", action="store_true")
+_S = parser.parse_args().s
+_D = parser.parse_args().d
 
 try:
 	import sympy
@@ -44,8 +46,7 @@ def create(n, x, d):
 run.clear()
 animate.join()
 
-print("\nDone!")
-print("Finished in " + str(time.time() - stime) + " seconds\n")
+print("\nDone! " + str(time.time() - stime) + " seconds\n")
 
 inputs = "".join(input("Enter a pattern:\n").split()).split(",")
 stime = time.time()
@@ -73,7 +74,7 @@ expand = sympy.expand(formula)
 sympify = sympy.sympify(formula, rational = True)
 factor = sympy.factor(formula)
 
-if S:
+if _S:
 	SFormula = f"n*(({inputs[0]}) + ({formula}))/2"
 	
 	SExpand = sympy.expand(SFormula)
@@ -81,8 +82,12 @@ if S:
 	SFactor = sympy.factor(SFormula)
 
 print("\nFirst 50 elements of the pattern above:")
-for n in range(1, 51):
-	print(factor.subs("n", n), end=", ")
+if _D:
+	for n in range(1, 51):
+		print(factor.evalf(subs={"n": n}), end=", ")
+else:
+	for n in range(1, 51):
+		print(factor.subs("n", n), end=", ")
 
 print("\n")
 
@@ -96,14 +101,27 @@ for i in range(z):
 	else:
 		pos = str(i + 1) + "th"
 	print(pos + " difference:")
-	for j in uni["diff_" + str(i)]:
-		print(j, end = ", ")
+	if _D:
+		for j in uni["diff_" + str(i)]:
+			print(j.evalf(), end = ", ")
+	else:
+		for j in uni["diff_" + str(i)]:
+			print(j, end = ", ")
 	print()
 
-print("\nFactor:\n" + str(factor))
-if S: print(str(SFactor))
-print("Expand:\n" + str(expand))
-if S: print(str(SExpand))
-print("Sympify:\n" + str(sympify))
-if S: print(str(SSympify))
-print("\nFinished in " + str(time.time() - stime) + " seconds")
+if _D:
+	print("\nFactor:\n" + str(factor.evalf()))
+	if _S: print(str(SFactor.evalf()))
+	print("Expand:\n" + str(expand.evalf()))
+	if _S: print(str(SExpand.evalf()))
+	print("Sympify:\n" + str(sympify.evalf()))
+	if _S: print(str(SSympify.evalf()))
+	print("\nFinished in " + str(time.time() - stime) + " seconds")
+else:
+	print("\nFactor:\n" + str(factor))
+	if _S: print(str(SFactor))
+	print("Expand:\n" + str(expand))
+	if _S: print(str(SExpand))
+	print("Sympify:\n" + str(sympify))
+	if _S: print(str(SSympify))
+	print("\nFinished in " + str(time.time() - stime) + " seconds")

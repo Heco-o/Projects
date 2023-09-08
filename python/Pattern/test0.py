@@ -4,7 +4,7 @@ from contextlib import contextmanager
 
 class LoadingAnimation:
 	def __init__(self):
-		self.animation = ["Please wait	", "Please wait.   ", "Please wait..  ", "Please wait... ", "Please wait...."]
+		self.animation = ["Please wait    ", "Please wait.   ", "Please wait..  ", "Please wait... ", "Please wait...."]
 		self.index = 0
 		self._running = threading.Event()
 
@@ -26,12 +26,7 @@ class LoadingAnimation:
 			eTime = time.time()
 			self._running.clear()
 			animation_thread.join()
-			print("\rSuccessfully Imported! " + str(eTime - sTime) + "s")
+			print("\rDone! " + str(eTime - sTime) + "s")
 
 with LoadingAnimation().start():
-	try:
-		import sympyi
-	except ModuleNotFoundError:
-		print("sympy module is required\nrun 'pip3 install sympy' to download the module")
-		exit()
-	import decimal
+	time.sleep(3)
