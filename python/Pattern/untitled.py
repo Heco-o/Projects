@@ -8,17 +8,16 @@ run.set()
 animation = ["Please wait    ", "Please wait.   ", "Please wait..  ", "Please wait... ", "Please wait...."]
 def animate():
 	index = 0
-	while run.is_set():
+	while run.is_set() and threading.main_thread().is_alive():
 		print(animation[index % len(animation)], end="\r")
 		index += 1
 		time.sleep(0.2)
 
 animate = threading.Thread(target=animate)
 animate.start()
-
 parser = argparse.ArgumentParser()
-parser.add_argument("-s", action="store_true")
-parser.add_argument("-d", action="store_true")
+parser.add_argument("-s", action="store_true", help="Formula for the sum of the nth term sequence")
+parser.add_argument("-d", action="store_true", help="Approximation formula instead of the exact one")
 _S = parser.parse_args().s
 _D = parser.parse_args().d
 
@@ -43,6 +42,14 @@ def create(n, x, d):
 		facto *= i
 	return f"({x}) + (({d})*({temp}))/{facto}"
 
+def SCreate(n, x, d):
+	facto = 2
+	temp = "(n - 1)"
+	for i in range(2, n + 2):
+		temp += f"*(n - {i})"
+		facto *= (i+1)
+	return f"({x}) + ({d})*n*({temp})/{facto}"
+
 run.clear()
 animate.join()
 
@@ -60,23 +67,28 @@ if len(inputs) <= 1:
 	print("More than one number is required")
 	exit()
 
-uni = {}
-uni["diff_0"], v, uni["d0"] = difference(inputs)
-formula = f"({inputs[0]}) + ({uni['d0']})*(n - 1)"
-z = 1
+uni = {"diff_-1": inputs.copy()}
+formula = f"({inputs[0]})"
+v, z = False, 0
 
-while not v:
-	uni["diff_"+str(z)], v, uni["d"+str(z)] = difference(uni["diff_"+str(z-1)])
-	formula = create(z, formula, uni["d"+str(z)])
-	z += 1
+if _S:
+	SFormula = f"{inputs[0]}*n"
+	while not v:
+		uni["diff_"+str(z)], v, uni["d"+str(z)] = difference(uni["diff_"+str(z-1)])
+		formula = create(z, formula, uni["d"+str(z)])
+		SFormula = SCreate(z, SFormula, uni["d"+str(z)])
+		z += 1
+else:
+	while not v:
+		uni["diff_"+str(z)], v, uni["d"+str(z)] = difference(uni["diff_"+str(z-1)])
+		formula = create(z, formula, uni["d"+str(z)])
+		z += 1
 
 expand = sympy.expand(formula)
 sympify = sympy.sympify(formula, rational = True)
 factor = sympy.factor(formula)
 
 if _S:
-	SFormula = f"n*(({inputs[0]}) + ({formula}))/2"
-	
 	SExpand = sympy.expand(SFormula)
 	SSympify = sympy.sympify(SFormula, rational = True)
 	SFactor = sympy.factor(SFormula)
