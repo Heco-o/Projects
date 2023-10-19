@@ -5,6 +5,7 @@ from discord.ext import commands
 from keep_alive import keep_alive
 
 client = commands.Bot(command_prefix = ".")
+con = False
 
 @client.event
 async def on_ready():
@@ -13,6 +14,8 @@ async def on_ready():
 @client.event
 async def on_message(message):
   user = str(message.author)
+  if user == "Pokétwo#8236" and message.content.startswith("Congratulations <@870748439212875918>! You caught a ") and con:
+	await message.channel.send("!start")
   
   if message.content == "Heco!" and user == "heco.#0":
     await message.channel.send("Hi everyone my name is Heco and i was made by heco.#0 hehe")
@@ -24,6 +27,20 @@ async def on_message(message):
     for i in range(40): await message.channel.send("E")
     
   await client.process_commands(message)
+
+@client.command()
+async def start(ctx):
+	if str(ctx.author) == "heco.#0":
+		global con
+		await ctx.channel.send("!start")
+		con = True
+
+@client.command()
+async def stop(ctx):
+	if str(ctx.author) == "heco.#0":
+		global con
+		con = False
+		await ctx.channel.send("!stop")
 
 @client.command()
 async def spam(ctx, amount=20, *, message="E"):
