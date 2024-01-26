@@ -16,14 +16,24 @@ def animate():
 animate = threading.Thread(target=animate)
 animate.start()
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(epilog="after executing: separate each element by a ',' in the input field")
 parser.add_argument("-g", action="store_true", help="Switch to geometric series")
 parser.add_argument("-s", action="store_true", help="Formula for the sum of the nth term sequence")
 parser.add_argument("-d", action="store_true", help="Approximation formula instead of the exact one")
+parser.add_argument("-n", type=int)
 _G = parser.parse_args().g
 _S = parser.parse_args().s
 _D = parser.parse_args().d
+_N = parser.parse_args().n
 
+if _G and _S:
+	print("Formula for sum of the geometric sequence isn't available")
+	exit()
+if _N != None:
+	print("-n is not available")
+	exit()
+
+_flush = True
 try:
 	import sympy
 except ModuleNotFoundError as E:
@@ -86,14 +96,19 @@ if len(inputs) <= 1:
 	exit()
 
 uni = {"diff_-1": inputs.copy()}
-formula = f"({inputs[0]})"
+if _N == None:
+	formula = f"({inputs[0]})"
+else:
+	formula = "(a)"
 v, z = False, 0
+part = [uni["diff_-1"]]
 if _G:
 	if _S:
 		pass
 	else:
 		while not v:
 			uni["diff_"+str(z)], v, uni["r"+str(z)] = difference(uni["diff_"+str(z-1)])
+			part.append(uni["diff_"+str(z)])
 			formula = create(z, formula, uni["r"+str(z)])
 			z += 1
 else:
@@ -101,18 +116,23 @@ else:
 		SFormula = f"{inputs[0]}*n"
 		while not v:
 			uni["diff_"+str(z)], v, uni["d"+str(z)] = difference(uni["diff_"+str(z-1)])
+			part.append(uni["diff_"+str(z)])
 			formula = create(z, formula, uni["d"+str(z)])
 			SFormula = SCreate(z, SFormula, uni["d"+str(z)])
 			z += 1
 	else:
 		while not v:
 			uni["diff_"+str(z)], v, uni["d"+str(z)] = difference(uni["diff_"+str(z-1)])
+			part.append(uni["diff_"+str(z)])
 			formula = create(z, formula, uni["d"+str(z)])
 			z += 1
-
-expand = sympy.expand(formula)
-sympify = sympy.sympify(formula, rational = True)
-factor = sympy.factor(formula)
+part.reverse()
+if _N != None:
+	pass
+else:
+	expand = sympy.expand(formula)
+	sympify = sympy.sympify(formula, rational = True)
+	factor = sympy.factor(formula)
 
 if _S:
 	SExpand = sympy.expand(SFormula)
@@ -123,10 +143,10 @@ print("\nFirst 50 elements of the pattern above:")
 try:
 	if _D:
 		for n in range(1, 51):
-			print(factor.evalf(subs={"n": n}), end=", ")
+			print(factor.evalf(subs={"n": n}), end=", ", flush=_flush)
 	else:
 		for n in range(1, 51):
-			print(factor.subs("n", n), end=", ")
+			print(factor.subs("n", n), end=", ", flush=_flush)
 except:
 	pass
 
@@ -144,10 +164,10 @@ for i in range(z):
 	print(pos + " difference:")
 	if _D:
 		for j in uni["diff_" + str(i)]:
-			print(j.evalf(), end = ", ")
+			print(j.evalf(), end = ", ", flush=_flush)
 	else:
 		for j in uni["diff_" + str(i)]:
-			print(j, end = ", ")
+			print(j, end = ", ", flush=_flush)
 	print()
 
 if _D:
@@ -166,3 +186,7 @@ else:
 	print("Sympify:\n" + str(sympify))
 	if _S: print(str(SSympify))
 	print("\nFinished in " + str(time.time() - stime) + " seconds")
+
+
+print(uni)
+print(part)

@@ -25,9 +25,9 @@ async def __play_game(engine1_path, engine2_path, pgn=False):
 	
 	while not board.is_game_over():
 		if board.turn == chess.BLACK:
-			result = await engine2.play(board, chess.engine.Limit(time=0.1), ponder=True)
+			result = await engine2.play(board, chess.engine.Limit(nodes=1), ponder=True)
 		else:
-			result = await engine1.play(board, chess.engine.Limit(time=0.1), ponder=True)
+			result = await engine1.play(board, chess.engine.Limit(nodes=1), ponder=True)
 		
 		if pgn:
 			node = node.add_variation(result.move)
