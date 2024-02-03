@@ -1,32 +1,30 @@
 #include <iostream>
 
-std::string generateRandomPassword(int length) {
-	const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-=_+";
-	const int charsetSize = std::strlen(charset);
-	
-	std::string password;
-	password.reserve(length);
-
-	srand(static_cast<unsigned int>(time(nullptr)));
-
-	for (int i = 0; i < length; ++i) {
-		password += charset[rand() % charsetSize];
-	}
-
-	return password;
-}
-
 int main() {
-	int length;
+    const int rows = 20;
+    const int cols = 20;
 
-	std::cout << "Enter the length of the password: ";
-	std::cin >> length;
+    char array[rows][cols];
+	for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            array[i][j] = ' ';
+        }
+    }
+    // Assume array is initialized with some values
+	array[12][5] = 'E';
+	array[13][5] = '#';
+    // Swap values between array[12][5] and array[13][5] without a temporary variable
+    array[12][5] ^= array[13][5];
+    array[13][5] ^= array[12][5];
+    array[12][5] ^= array[13][5];
 
-	if (length <= 0) {
-		std::cerr << "Invalid input. Please enter a positive password length." << std::endl;
-		return 1;
-	}
-	
-    std::string password = generateRandomPassword(length);
-	std::cout << "Generated Password:\n" << password;
+    // Display the updated array
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            std::cout << array[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    return 0;
 }
