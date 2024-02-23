@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chess Board</title>
+  <link rel="stylesheet" href="https://unpkg.com/chessboardjs@1/css/chessboard.css">
+</head>
+<body>
+  <div id="board" style="width: 400px"></div>
+
+  <script src="https://unpkg.com/chessboardjs@1"></script>
+  <script>
+    function getBestMove() {
+      const board = Chessboard('board', 'start');
+      const fen = board.fen();
+
+      fetch(`/bestMove?fen=${fen}`)
+        .then(response => response.json())
+        .then(data => {
+          const bestMove = data.bestMove;
+          console.log('Best move:', bestMove);
+          // Do something with the best move, e.g., highlight it on the board
+        });
+    }
+  </script>
+</body>
+</html>
