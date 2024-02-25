@@ -72,8 +72,8 @@ public:
 				if (coordinates[parts[0].posY][columns - 1] == bodyBase){
 					gameOver = true;
 				} else {
-					for (int i = 0; i < 4; i++) {
-						if (coordinates[parts[0].posY][columns - 1] == parts[0].bases[i]){
+					for (char base : parts[0].bases) {
+						if (coordinates[parts[0].posY][columns - 1] == base){
 							gameOver = true;
 						}
 					}
@@ -93,8 +93,8 @@ public:
 				if (coordinates[parts[0].posY][0] == bodyBase){
 					gameOver = true;
 				} else {
-					for (int i = 0; i < 4; i++) {
-						if (coordinates[parts[0].posY][0] == parts[0].bases[i]){
+					for (char base : parts[0].bases) {
+						if (coordinates[parts[0].posY][0] == base){
 							gameOver = true;
 						}
 					}
@@ -114,8 +114,8 @@ public:
 				if (coordinates[parts[0].posY][parts[0].posX + parts[0].directionX] == bodyBase){
 					gameOver = true;
 				} else {
-					for (int i = 0; i < 4; i++) {
-						if (coordinates[parts[0].posY][parts[0].posX + parts[0].directionX] == parts[0].bases[i]){
+					for (char base : parts[0].bases) {
+						if (coordinates[parts[0].posY][parts[0].posX + parts[0].directionX] == base){
 							gameOver = true;
 						}
 					}
@@ -137,8 +137,8 @@ public:
 				if (coordinates[lines - 1][parts[0].posX] == bodyBase){
 					gameOver = true;
 				} else {
-					for (int i = 0; i < 4; i++) {
-						if (coordinates[lines - 1][parts[0].posX] == parts[0].bases[i]){
+					for (char base : parts[0].bases) {
+						if (coordinates[lines - 1][parts[0].posX] == base){
 							gameOver = true;
 						}
 					}
@@ -158,8 +158,8 @@ public:
 				if (coordinates[0][parts[0].posX] == bodyBase){
 					gameOver = true;
 				} else {
-					for (int i = 0; i < 4; i++) {
-						if (coordinates[0][parts[0].posX] == parts[0].bases[i]){
+					for (char base : parts[0].bases) {
+						if (coordinates[0][parts[0].posX] == base){
 							gameOver = true;
 						}
 					}
@@ -179,8 +179,8 @@ public:
 				if (coordinates[parts[0].posY + parts[0].directionY][parts[0].posX] == bodyBase){
 					gameOver = true;
 				} else {
-					for (int i = 0; i < 4; i++) {
-						if (coordinates[parts[0].posY + parts[0].directionY][parts[0].posX] == parts[0].bases[i]){
+					for (char base : parts[0].bases) {
+						if (coordinates[parts[0].posY + parts[0].directionY][parts[0].posX] == base){
 							gameOver = true;
 						}
 					}

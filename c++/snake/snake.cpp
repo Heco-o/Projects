@@ -30,8 +30,6 @@ struct Food{
 	int posX, posY;
 };
 
-Part head;
-
 class Snake {
 	std::vector<std::vector<char>>& coordinates;
 	std::uniform_int_distribution<int> distributionX;
@@ -270,18 +268,19 @@ void displayPosition(const std::vector<std::vector<char>> & coordinates, Snake& 
 				printw("\n");
 			}
 		}
-		printw("Score: %d ", snake.score);
+		{
+			std::unique_lock<std::mutex> lock2(snakeMutex);
+			printw("Score: %d ", snake.score);
+		}
 		frames++;
 		std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
 		std::chrono::duration < double > elapsedSeconds = currentTime - lastFrameTime;
 		if (elapsedSeconds.count() >= 1.0) {
 			fps = frames / elapsedSeconds.count();
-		}
-		printw("FPS: %.2f\n", fps);
-		if (elapsedSeconds.count() >= 1.0) {
 			lastFrameTime = currentTime;
 			frames = 0;
 		}
+		printw("FPS: %.2f\n", fps);
 		refresh();
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
@@ -332,7 +331,7 @@ void inputThread(Snake& snake) {
 
 int main() {
 	if (!getTerminalSize()) { return 1; }
-	head = {
+	Part head = {
 		.bases = {'^', 'v', '<', '>'},
 		.directionX = 0,
 		.directionY = -1,
