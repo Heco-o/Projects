@@ -272,6 +272,9 @@ void displayPosition(const std::vector<std::vector<char>> & coordinates, Snake& 
 			std::unique_lock<std::mutex> lock2(snakeMutex);
 			printw("Score: %d ", snake.score);
 		}
+		printw("FPS: %.2f", fps);
+		refresh();
+		
 		frames++;
 		std::chrono::steady_clock::time_point currentTime = std::chrono::steady_clock::now();
 		std::chrono::duration < double > elapsedSeconds = currentTime - lastFrameTime;
@@ -280,8 +283,6 @@ void displayPosition(const std::vector<std::vector<char>> & coordinates, Snake& 
 			lastFrameTime = currentTime;
 			frames = 0;
 		}
-		printw("FPS: %.2f\n", fps);
-		refresh();
 		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 }
