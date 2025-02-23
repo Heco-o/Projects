@@ -1,5 +1,6 @@
 #include <string>
 
+/*
 struct Item {
 	std::string name;
 	int quantity;
@@ -18,4 +19,10 @@ struct Item {
 		baseDurability = durability;
 		baseDamage = damage;
 	}
+};*/
+
+class Item {
+	public:
+	std::string name = "";
+	std::string description = "";
 };

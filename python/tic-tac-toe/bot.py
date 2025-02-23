@@ -53,7 +53,7 @@ def makeMove(pos, num):
 def getMove(pos, turn):
 	while move := list(input("Enter the move:\n").strip()):
 		if len(move) == 2:
-			if 3 >= move[0] >= 1 and 3 >= move[1] >= 1:
+			if 3 >= int(move[0]) >= 1 and 3 >= int(move[1]) >= 1:
 				move = 3*int(move[0]) + int(move[1]) - 4
 				if pos[move] == "e":
 					break

@@ -1,0 +1,24 @@
+{
+  "format_version": 2,
+  "header": {
+    "description": "This is a sample behavior pack connected to a resource pack.",
+    "name": "Sample Behavior Pack",
+    "uuid": "b3d421bf-99ab-4b0f-8c45-abb78467f88f",  // Unique UUID for the behavior pack
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 20, 0]
+  },
+  "modules": [
+    {
+      "description": "Main behavior pack module",
+      "type": "data",
+      "uuid": "d3b9c1a7-00ac-4b2b-8ec2-4f08a5cf55d3",  // Unique UUID for this module
+      "version": [1, 0, 0]
+    }
+  ],
+  "dependencies": [
+    {
+      "uuid": "b8c9f741-bad5-4b1e-9f5f-c0e1e9b4e9c5",  // UUID of the resource pack
+      "version": [1, 0, 0]  // Version of the resource pack to depend on
+    }
+  ]
+}

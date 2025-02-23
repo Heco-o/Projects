@@ -14,6 +14,11 @@ int main() {
 	std::cout << "Stamina: " << player.stamina << std::endl;
 	player.stamina + 200;
 	std::cout << "Stamina: " << player.stamina << std::endl;
-
+	
+	player.money + 10000;
+	std::cout << "Money: " << player.money << std::endl;
+	player.money - 12300;
+	std::cout << "Money: " << player.money << std::endl;
+	
 	return 0;
 }

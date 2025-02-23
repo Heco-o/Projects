@@ -13,8 +13,15 @@ void saveData() {
 	file.close();
 }
 
+std::vector<std::string> board = { "_", "_", "_", "_", "_", "_", "_", "_", "_" };
+std::string current_player = "X"; // Track the current player (X or O)
+
+void update_board(dpp::cluster& bot, const dpp::button_click_t& event) {
+	
+}
+
 int main() {
-	if (!file.is_open() | !file2.is_open()) {
+	if (!file.is_open() || !file2.is_open()) {
 		std::cerr << "Failed to open file!\n" + std::to_string(file.is_open()) + "\n" + std::to_string(file2.is_open());
 		return 1;
 	} 
@@ -74,7 +81,7 @@ int main() {
 						event.reply(names);
 					});
 				});
-			} else if (event.command.get_command_name() == "roles") {
+			} else if (event.command.get_command_name() == "serverlock") {
 				if (data[sGuildID] == nullptr) {
 					bot.channels_get(guildID, [&bot, event, guildID, sGuildID](const dpp::confirmation_callback_t& callback) {
 						const dpp::channel_map mChannels = callback.get<dpp::channel_map>();
@@ -111,11 +118,11 @@ int main() {
 								data[sGuildID][sChannelID] = nullptr;
 								deny.add(dpp::p_send_messages);
 							}
-							bot.channel_edit_permissions(channel, guildID, allow, deny, false, [](const dpp::confirmation_callback_t& callback) {
+							bot.channel_edit_permissions(channel, guildID, allow, deny, false, [channel](const dpp::confirmation_callback_t& callback) {
 								if (callback.is_error()) {
 									std::cerr << "Lock: " << callback.get_error().message << std::endl;
 								} else {
-									std::cout << "Lock: success!" << std::endl;
+									std::cout << "Lock -> " << channel.name << ": success!" << std::endl;
 								}
 							});
 						}
@@ -129,8 +136,9 @@ int main() {
 				} else {
 					event.reply("Server is already locked.");
 				}
+				std::cout << "ServerLock: success!" << std::endl;
 				event.reply("Server is being locked...");
-			} else if (event.command.get_command_name() == "unroles") {
+			} else if (event.command.get_command_name() == "serverunlock") {
 				if (data[sGuildID] != nullptr) {
 					bot.channels_get(guildID, [&bot, event, guildID, sGuildID](const dpp::confirmation_callback_t& callback) {
 						const dpp::channel_map mChannels = callback.get<dpp::channel_map>();
@@ -156,20 +164,20 @@ int main() {
 								} else if (data[sGuildID][sChannelID]["sendMsg"] == nullptr) {
 									deny.remove(dpp::p_send_messages);
 								} if (data[sGuildID][sChannelID]["sendMsg"] != false) {
-									bot.channel_edit_permissions(channel, guildID, allow, deny, false, [](const dpp::confirmation_callback_t& callback) {
+									bot.channel_edit_permissions(channel, guildID, allow, deny, false, [channel](const dpp::confirmation_callback_t& callback) {
 										if (callback.is_error()) {
 											std::cerr << "UnLock: " << callback.get_error().message << std::endl;
 										} else {
-											std::cout << "UnLock: success!" << std::endl;
+											std::cout << "UnLock -> " << channel.name << ": success!" << std::endl;
 										}
 									});
 								}
 							} else {
-								bot.channel_delete_permission(channel, guildID, [](const dpp::confirmation_callback_t& callback) {
+								bot.channel_delete_permission(channel, guildID, [channel](const dpp::confirmation_callback_t& callback) {
 									if (callback.is_error()) {
 										std::cerr << "Remove: " << callback.get_error().message << std::endl;
 									} else {
-										std::cout << "Remove: success!" << std::endl;
+										std::cout << "Remove -> " << channel.name << ": success!" << std::endl;
 									}
 								});
 							}
@@ -182,6 +190,7 @@ int main() {
 						data[sGuildID] = nullptr;
 						saveData();
 					});
+					std::cout << "ServerUnLock: success!" << std::endl;
 					event.reply("Server is being unlocked...");
 				} else {
 					event.reply("You didn't lock the server.");
@@ -196,8 +205,9 @@ int main() {
 			bot.global_command_create(dpp::slashcommand("ping", "Ping pong!", bot.me.id));
 			bot.global_command_create(dpp::slashcommand("test", "test", bot.me.id));
 			bot.global_command_create(dpp::slashcommand("test1", "test1", bot.me.id));
-			bot.global_command_create(dpp::slashcommand("roles", "locks the server", bot.me.id));
-			bot.global_command_create(dpp::slashcommand("unroles", "unlocks the server", bot.me.id));
+			bot.global_command_create(dpp::slashcommand("serverlock", "locks the server", bot.me.id));
+			bot.global_command_create(dpp::slashcommand("serverunlock", "unlocks the server", bot.me.id));
+			bot.global_command_create(dpp::slashcommand("tic-tac-toe", "Play a tic-tac-toe game witht the perfect bot.", bot.me.id));
 		}
 	});
 	

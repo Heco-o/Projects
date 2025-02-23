@@ -1,0 +1,18 @@
+{
+  "format_version": 2,
+  "header": {
+    "description": "This is a sample resource pack.",
+    "name": "Sample Resource Pack",
+    "uuid": "b8c9f741-bad5-4b1e-9f5f-c0e1e9b4e9c5",  // Unique UUID for the resource pack
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 20, 0]
+  },
+  "modules": [
+    {
+      "description": "Main resource pack module",
+      "type": "resources",
+      "uuid": "e774c2a7-42e4-43ae-95b5-b87748924472",  // Unique UUID for this module
+      "version": [1, 0, 0]
+    }
+  ]
+}

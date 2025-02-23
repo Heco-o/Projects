@@ -46,7 +46,7 @@
         ],
         "info": {
             "draft": false,
-            "games": 0,
+            "games": 1,
             "player1ID": 1,
             "player2ID": 2
         }
@@ -58,6 +58,67 @@
             "games": 0,
             "player1ID": 1091610334986514492,
             "player2ID": 704121360569597953
+        }
+    },
+    "1091610334986514492, 971352575096004658": {
+        "games": [
+            {
+                "game": [],
+                "info": {}
+            },
+            {
+                "game": [
+                    [
+                        "king",
+                        "servant"
+                    ],
+                    [
+                        "servant",
+                        "king"
+                    ],
+                    [
+                        "servant",
+                        "king"
+                    ],
+                    [
+                        "servant",
+                        "slave"
+                    ],
+                    [
+                        "king",
+                        "slave"
+                    ]
+                ],
+                "info": {
+                    "player1Cards": [
+                        "slave",
+                        "slave",
+                        "king"
+                    ],
+                    "player1point": 2,
+                    "player2Cards": [
+                        "servant",
+                        "king",
+                        "slave"
+                    ],
+                    "player2point": 3
+                }
+            }
+        ],
+        "info": {
+            "draft": false,
+            "games": 0,
+            "player1ID": 1091610334986514492,
+            "player2ID": 971352575096004658
+        }
+    },
+    "1197932418703835197, 773924119762173983": {
+        "games": [],
+        "info": {
+            "draft": false,
+            "games": 0,
+            "player1ID": 1197932418703835197,
+            "player2ID": 773924119762173983
         }
     },
     "1197932418703835197, 939174564578091038": {
@@ -123,6 +184,325 @@
             "games": 0,
             "player1ID": 1222415088833527889,
             "player2ID": 962214613338980362
+        }
+    },
+    "1236350523238776873, 971352575096004658": {
+        "games": [
+            {
+                "game": [],
+                "info": {}
+            },
+            null,
+            {
+                "game": [
+                    [
+                        "slave",
+                        "slave"
+                    ],
+                    [
+                        "servant",
+                        "king"
+                    ],
+                    [
+                        "slave",
+                        "slave"
+                    ],
+                    [
+                        "king",
+                        "servant"
+                    ],
+                    [
+                        "servant",
+                        "servant"
+                    ],
+                    [
+                        "slave",
+                        "slave"
+                    ],
+                    [
+                        "slave",
+                        "king"
+                    ],
+                    [
+                        "king",
+                        "king"
+                    ]
+                ],
+                "info": {
+                    "player1Cards": [],
+                    "player1point": 2,
+                    "player2Cards": [],
+                    "player2point": 1
+                }
+            }
+        ],
+        "info": {
+            "draft": false,
+            "games": 0,
+            "player1ID": 1236350523238776873,
+            "player2ID": 971352575096004658
+        }
+    },
+    "1241458600430534809, 1216143815690289262": {
+        "games": [],
+        "info": {
+            "draft": false,
+            "games": 0,
+            "player1ID": 1241458600430534809,
+            "player2ID": 1216143815690289262
+        }
+    },
+    "1252173630679421010, 1216143815690289262": {
+        "games": [
+            {
+                "game": [
+                    [
+                        "slave",
+                        "king"
+                    ],
+                    [
+                        "servant",
+                        "king"
+                    ],
+                    [
+                        "servant",
+                        "servant"
+                    ],
+                    [
+                        "servant",
+                        "slave"
+                    ],
+                    [
+                        "king",
+                        "servant"
+                    ]
+                ],
+                "info": {
+                    "player1Cards": [
+                        "king",
+                        "slave",
+                        "king",
+                        "slave"
+                    ],
+                    "player1point": 3,
+                    "player2Cards": [
+                        "slave",
+                        "servant",
+                        "servant",
+                        "servant"
+                    ],
+                    "player2point": 1
+                }
+            }
+        ],
+        "info": {
+            "draft": false,
+            "games": 1,
+            "player1ID": 1252173630679421010,
+            "player2ID": 1216143815690289262
+        }
+    },
+    "562968518513917993, 939174564578091038": {
+        "games": [
+            {
+                "game": [
+                    [
+                        "servant",
+                        "king"
+                    ],
+                    [
+                        "king",
+                        "king"
+                    ],
+                    [
+                        "king",
+                        "king"
+                    ],
+                    [
+                        "king",
+                        "king"
+                    ],
+                    [
+                        "servant",
+                        "servant"
+                    ],
+                    [
+                        "slave",
+                        "slave"
+                    ],
+                    [
+                        "slave",
+                        "slave"
+                    ],
+                    [
+                        "slave",
+                        "servant"
+                    ]
+                ],
+                "info": {
+                    "player1Cards": [],
+                    "player1point": 0,
+                    "player2Cards": [],
+                    "player2point": 2
+                }
+            }
+        ],
+        "info": {
+            "draft": false,
+            "games": 0,
+            "player1ID": 562968518513917993,
+            "player2ID": 939174564578091038
+        }
+    },
+    "773924119762173983, 761912613029543966": {
+        "games": [
+            {
+                "game": [
+                    [
+                        "servant",
+                        "servant"
+                    ],
+                    [
+                        "slave",
+                        "king"
+                    ],
+                    [
+                        "king",
+                        "king"
+                    ],
+                    [
+                        "servant",
+                        "servant"
+                    ],
+                    [
+                        "servant",
+                        "servant"
+                    ],
+                    [
+                        "slave",
+                        "slave"
+                    ],
+                    [
+                        "slave",
+                        "slave"
+                    ],
+                    [
+                        "king",
+                        "slave"
+                    ]
+                ],
+                "info": {
+                    "player1Cards": [],
+                    "player1point": 1,
+                    "player2Cards": [],
+                    "player2point": 1
+                }
+            }
+        ],
+        "info": {
+            "draft": false,
+            "games": 1,
+            "player1ID": 773924119762173983,
+            "player2ID": 761912613029543966
+        }
+    },
+    "773924119762173983, 916317877546655825": {
+        "games": [
+            {
+                "game": [],
+                "info": {}
+            },
+            {
+                "game": [
+                    [
+                        "king",
+                        "servant"
+                    ],
+                    [
+                        "servant",
+                        "king"
+                    ],
+                    [
+                        "servant",
+                        "slave"
+                    ],
+                    [
+                        "slave",
+                        "slave"
+                    ],
+                    [
+                        "slave",
+                        "king"
+                    ]
+                ],
+                "info": {
+                    "player1Cards": [
+                        "slave",
+                        "slave",
+                        "servant",
+                        "king"
+                    ],
+                    "player1point": 3,
+                    "player2Cards": [
+                        "servant",
+                        "servant",
+                        "servant"
+                    ],
+                    "player2point": 1
+                }
+            }
+        ],
+        "info": {
+            "draft": false,
+            "games": 2,
+            "player1ID": 773924119762173983,
+            "player2ID": 916317877546655825
+        }
+    },
+    "905985281973420053, 1236350523238776873": {
+        "games": [
+            {
+                "game": [
+                    [
+                        "slave",
+                        "servant"
+                    ],
+                    [
+                        "servant",
+                        "king"
+                    ],
+                    [
+                        "servant",
+                        "servant"
+                    ],
+                    [
+                        "king",
+                        "slave"
+                    ]
+                ],
+                "info": {
+                    "player1Cards": [
+                        "king",
+                        "slave",
+                        "king",
+                        "servant"
+                    ],
+                    "player1point": 0,
+                    "player2Cards": [
+                        "king",
+                        "slave",
+                        "slave",
+                        "servant"
+                    ],
+                    "player2point": 3
+                }
+            }
+        ],
+        "info": {
+            "draft": false,
+            "games": 0,
+            "player1ID": 905985281973420053,
+            "player2ID": 1236350523238776873
         }
     }
 }

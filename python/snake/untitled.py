@@ -1,0 +1,317 @@
+import threading
+import curses
+import random
+import time
+import os
+
+columns, lines = os.get_terminal_size()
+lines -= 1
+possiblePos = {(i, j) for i in range(columns) for j in range(lines)}
+
+#headsPos = set()
+partsPos = set()
+foodsPos = set()
+gameNotOver = True
+
+foods = {}
+snakes = []
+
+#stdscr = curses.initscr()
+#curses.noecho()
+#curses.cbreak()
+#stdscr.keypad(True)
+#stdscr.nodelay(True)
+
+class PosX:
+	def __init__(self, x=0):
+		self.__x = int(x % columns)
+	
+	def __add__(self, value):
+		return PosX(self.__x + value)
+	
+	def __radd__(self, value):
+		return int(value + self.__x)
+	
+	def __sub__(self, value):
+		return PosX(self.__x - value)
+	
+	def __rsub__(self, value):
+		return int(value - self.__x)
+	
+	def __get__(self, instance, Class):
+		return self
+	
+	def __set__(self, instance, value):
+		self.__x = int(value) % columns
+	
+	def __int__(self):
+		return int(self.__x)
+	
+	def __index__(self):
+		return int(self.__x)
+	
+	def __hash__(self):
+		return int(self.__x)
+	
+	def __repr__(self):
+		return str(self.__x)
+
+class PosY:
+	def __init__(self, y=0):
+		self.__y = int(y % lines)
+	
+	def __add__(self, value):
+		return PosY(self.__y + value)
+	
+	def __radd__(self, value):
+		return int(value + self.__y)
+	
+	def __sub__(self, value):
+		return PosY(self.__y - value)
+	
+	def __rsub__(self, value):
+		return int(value - self.__y)
+	
+	def __get__(self, instance, Class):
+		return self
+	
+	def __set__(self, instance, value):
+		self.__y = int(value) % lines
+	
+	def __int__(self):
+		return int(self.__y)
+	
+	def __index__(self):
+		return int(self.__y)
+	
+	def __hash__(self):
+		return int(self.__y)
+	
+	def __repr__(self):
+		return str(self.__y)
+
+class Head:
+	base = "^"
+	bases = ["^", "v", "<", ">"]
+	
+	_posX = pastPosX = PosX()
+	_posY = pastPosY = PosY()
+	
+	def __init__(self, directionX = 0, directionY = -1, posX = 0, posY = 0):
+		self._directionX = directionX
+		self._directionY = directionY
+		self._posX = self.pastPosX = posX
+		self._posY = self.pastPosY = posY
+		#headsPos.add((self._posX, self._posY))
+		partsPos.add((self._posX, self._posY))
+		self.update_base()
+	
+	@property
+	def directionX(self):
+		return self._directionX
+
+	@property
+	def directionY(self):
+		return self._directionY
+
+	@directionX.setter
+	def directionX(self, value):
+		self._directionX = value
+		self._directionY = 0
+		self.update_base()
+
+	@directionY.setter
+	def directionY(self, value):
+		self._directionX = 0
+		self._directionY = value
+		self.update_base()
+	
+	@property
+	def posX(self):
+		return self._posX
+	
+	@property
+	def posY(self):
+		return self._posY
+	
+	@posX.setter
+	def posX(self, value):
+		#headsPos.remove((self._posX, self._posY))
+		partsPos.remove((self._posX, self._posY))
+		self.pastPosX = self._posX
+		self.pastPosY = self._posY
+		self._posX = value
+		#headsPos.add((self._posX, self._posY))
+		partsPos.add((self._posX, self._posY))
+	
+	@posY.setter
+	def posY(self, value):
+		#headsPos.remove((self._posX, self._posY))
+		partsPos.remove((self._posX, self._posY))
+		self.pastPosX = self._posX
+		self.pastPosY = self._posY
+		self._posY = value
+		#headsPos.add((self._posX, self._posY))
+		partsPos.add((self._posX, self._posY))
+	
+	def update_base(self):
+		if self._directionX == 1:
+			self.base = self.bases[3]
+		elif self._directionX == -1:
+			self.base = self.bases[2]
+		elif self._directionY == 1:
+			self.base = self.bases[1]
+		elif self._directionY == -1:
+			self.base = self.bases[0]
+
+class Part:
+	base = "#"
+	
+	_posX = pastPosX = PosX()
+	_posY = pastPosY = PosY()
+	
+	def __init__(self, posX = 0, posY = 0):
+		self.posX = self.pastPosX = posX
+		self.posY = self.pastPosY = posY
+		
+		partsPos.add((self.posX, self.posY))
+	
+	def set(self, posX, posY):
+		partsPos.remove((self.posX, self.posY))
+		self.pastPosX = self.posX
+		self.pastPosY = self.posY
+		self.posX = posX
+		self.posY = posY
+		partsPos.add((self.posX, self.posY))
+
+class Food:
+	base = "@"
+	
+	posX = PosX()
+	posY = PosY()
+	
+	def __init__(self, posX = None, posY = None):
+		availPos = possiblePos - partsPos - foodsPos
+		if posX == None and posY == None:
+			availPos = random.choice(list(availPos))
+			self.posX = availPos[0]
+			self.posY = availPos[1]
+		elif (posX == None) ^ (posY == None):
+			if posX != None: availPos = {pos for pos in availPos if pos[0] == int(posX)}
+			elif posY != None: availPos = {pos for pos in availPos if pos[1] == int(posY)}
+			availPos = random.choice(list(availPos))
+			self.posX = availPos[0]
+			self.posY = availPos[1]
+		else:
+			self.posX = posX
+			self.posY = posY
+		
+		foods[(self.posX, self.posY)] = self
+		foodsPos.add((self.posX, self.posY))
+	
+	def ate(self, posX = None, posY = None):
+		foods.pop((self.posX, self.posY))
+		foodsPos.remove((self.posX, self.posY))
+		Food(posX, posY)
+
+class Snake:
+	def __init__(self, directionX = 0, directionY = -1, posX = int(columns/2), posY = int(lines/2)):
+		self.foodAte = self.gameOver = False
+		self.parts = []
+		self.score = 0
+		
+		self.head = Head(directionX, directionY, posX, posY)
+		self.parts.append(self.head)
+		snakes.append(self)
+	
+	def nextH(self):
+		if (self.head.posX + self.head.directionX, self.head.posY + self.head.directionY) in partsPos: self.gameOver = True
+		if (self.head.posX + self.head.directionX, self.head.posY + self.head.directionY) in foodsPos: self.foodAte = True
+		print()
+		print((self.head.posX + self.head.directionX, self.head.posY + self.head.directionY))
+		for foodpos in foodsPos: print((type(foodpos[0]), type(foodpos[1])))
+		print(self.foodAte)
+		self.head.posX += self.head.directionX
+		self.head.posY += self.head.directionY
+	
+	def nextP(self):
+		for i in range(1, len(self.parts)):
+			self.parts[i].set(self.parts[i - 1].pastPosX, self.parts[i - 1].pastPosY)
+	
+	def generatePart(self):
+		currentSize = len(self.parts) - 1
+		self.parts.append(Part(self.parts[currentSize].pastPosX, self.parts[currentSize].pastPosY))
+	
+	def update(self):
+		self.nextH()
+		self.nextP()
+		if self.foodAte:
+			self.score += 1
+			self.generatePart()
+			foods[(self.head.posX, self.head.posY)].ate()
+			self.foodAte = False
+
+def renderPositions():
+	fps = fps_counter = 0
+	last_time = time.time()
+	while gameNotOver:
+		stdscr.clear()
+		for snake in snakes:
+			for part in snake.parts:
+				try:
+					stdscr.addch(part.posY, part.posX, part.base)
+				except curses.error:
+					pass
+			for foodPos in foodsPos:
+				try:
+					stdscr.addch(foodPos[1], foodPos[0], '@')
+				except curses.error:
+					pass
+		
+		fps_counter += 1
+		current_time = time.time()
+		if current_time - last_time >= 1.0:  # 1 second has passed
+			fps = fps_counter
+			fps_counter = 0
+			last_time = current_time
+		stdscr.addstr(lines, 0, f"FPS: {fps}")
+		
+		for i in range(len(snakes)):
+			stdscr.addstr(f", score{i}: {snakes[i].score}")
+		
+		stdscr.refresh()
+		time.sleep(0.01)
+
+def inputHandle():
+	global gameNotOver
+	key = stdscr.getch()
+	if key != -1:
+		if key == curses.KEY_UP and snakes[0].head.directionY != 1:
+			snakes[0].head.directionY = -1
+		elif key == curses.KEY_DOWN and snakes[0].head.directionY != -1:
+			snakes[0].head.directionY = 1
+		elif key == curses.KEY_LEFT and snakes[0].head.directionX != 1:
+			snakes[0].head.directionX = -1
+		elif key == curses.KEY_RIGHT and snakes[0].head.directionX != -1:
+			snakes[0].head.directionX = 1
+		elif key == 27:
+			gameNotOver = False
+
+snake0 = Snake()
+
+#render = threading.Thread(target=renderPositions)
+#render.start()
+
+Food(columns/2)
+while gameNotOver:
+	for snake in snakes:
+		snake.update()
+		#inputHandle()
+		print(partsPos)
+		print(foodsPos)
+		if snake.gameOver == True:
+			gameNotOver = False
+	time.sleep(1)
+
+#render.join()
+curses.endwin()

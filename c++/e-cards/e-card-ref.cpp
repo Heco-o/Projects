@@ -69,12 +69,12 @@ void check(std::string choice1, std::string choice2) {
 			makeGameMsg(choice1, choice2);
 			data[cPlayersID]["games"][gameRound]["game"].push_back({"king", "king"});
 		} else if (choice2 == "servant") {
-			makeGameMsg(choice1, choice2);
 			p1point += 1;
+			makeGameMsg(choice1, choice2);
 			data[cPlayersID]["games"][gameRound]["game"].push_back({"king", "servant"});
 		} else if (choice2 == "slave") {
-			makeGameMsg(choice1, choice2);
 			p2point += 1;
+			makeGameMsg(choice1, choice2);
 			data[cPlayersID]["games"][gameRound]["game"].push_back({"king", "slave"});
 		}
 	} else if (choice1 == "servant") {
@@ -104,7 +104,6 @@ void check(std::string choice1, std::string choice2) {
 			data[cPlayersID]["games"][gameRound]["game"].push_back({"slave", "slave"});
 		}
 	}
-	std::cout << "errorcheck1" << std::endl;
 	if (!p1cards.empty()) {
 		p1cards.erase(std::find(p1cards.begin(), p1cards.end(), choice1));
 	} if (!p2cards.empty()) {
@@ -185,7 +184,7 @@ int main() {
 	
 	while (true) {
 		std::string command;
-		std::cout << "Heco.<$> "  << std::flush;
+		std::cout << "E-Card[>] "  << std::flush;
 		std::getline(std::cin, command);
 		const std::vector<std::string> commands = split(command);
 		const size_t size = commands.size();
@@ -213,52 +212,50 @@ int main() {
 				} else {
 					std::cout << "Please enter an ID" << std::flush;
 				}
-			} else if (commands[0] == "card" && size >= 3) {
-				if (commands[1] == "add1") {
-					for (int i = 2; i < size; i++) {
-						if (std::find(cards.begin(), cards.end(), commands[i]) != cards.end()) {
-							p1cards.push_back(commands[i]);
-							std::cout << commands[i] << " has been added to player1's cards." << std::endl;
-						} else {
-							std::cout << "'" << commands[i] << "' isn't a valid card." << std::endl;
-						}
+			} else if (commands[0] == "add1" && size > 1) {
+				for (int i = 1; i < size; i++) {
+					if (std::find(cards.begin(), cards.end(), commands[i]) != cards.end()) {
+						p1cards.push_back(commands[i]);
+						std::cout << commands[i] << " has been added to player1's cards." << std::endl;
+					} else {
+						std::cout << "'" << commands[i] << "' isn't a valid card." << std::endl;
 					}
-				} else if (commands[1] == "add2") {
-					for (int i = 2; i < size; i++) {
-						if (std::find(cards.begin(), cards.end(), commands[i]) != cards.end()) {
-							p2cards.push_back(commands[i]);
-							std::cout << commands[i] << " has been added to player2's cards." << std::endl;
-						} else {
-							std::cout << "'" << commands[i] << "' isn't a valid card." << std::endl;
-						}
+				}
+			} else if (commands[0] == "add2" && size > 1) {
+				for (int i = 1; i < size; i++) {
+					if (std::find(cards.begin(), cards.end(), commands[i]) != cards.end()) {
+						p2cards.push_back(commands[i]);
+						std::cout << commands[i] << " has been added to player2's cards." << std::endl;
+					} else {
+						std::cout << "'" << commands[i] << "' isn't a valid card." << std::endl;
 					}
-				} else if (commands[1] == "sub1") {
-					for (int i = 2; i < size; i++) {
-						if (std::find(cards.begin(), cards.end(), commands[i]) != cards.end()) {
-							std::vector<std::string>::iterator it = std::find(p1cards.begin(), p1cards.end(), commands[i]);
-							if (it != p1cards.end()) {
-								p1cards.erase(it);
-								std::cout << commands[i] << " has been removed from player1's cards." << std::endl;
-							} else {
-								std::cout << "Player1 doesn't have any " << commands[i] << " cards." << std::endl;
-							}
+				}
+			} else if (commands[0] == "sub1" && size > 1) {
+				for (int i = 1; i < size; i++) {
+					if (std::find(cards.begin(), cards.end(), commands[i]) != cards.end()) {
+						std::vector<std::string>::iterator it = std::find(p1cards.begin(), p1cards.end(), commands[i]);
+						if (it != p1cards.end()) {
+							p1cards.erase(it);
+							std::cout << commands[i] << " has been removed from player1's cards." << std::endl;
 						} else {
-							std::cout << "'" << commands[i] << "' isn't a valid card." << std::endl;
+							std::cout << "Player1 doesn't have any " << commands[i] << " cards." << std::endl;
 						}
+					} else {
+						std::cout << "'" << commands[i] << "' isn't a valid card." << std::endl;
 					}
-				} else if (commands[1] == "sub2") {
-					for (int i = 2; i < size; i++) {
-						if (std::find(cards.begin(), cards.end(), commands[i]) != cards.end()) {
-							std::vector<std::string>::iterator it = std::find(p2cards.begin(), p2cards.end(), commands[i]);
-							if (it != p2cards.end()) {
-								p2cards.erase(it);
-								std::cout << commands[i] << " has been removed from player2's cards." << std::endl;
-							} else {
-								std::cout << "Player2 doesn't have any " << commands[i] << " cards." << std::endl;
-							}
+				}
+			} else if (commands[0] == "sub2" && size > 1) {
+				for (int i = 1; i < size; i++) {
+					if (std::find(cards.begin(), cards.end(), commands[i]) != cards.end()) {
+						std::vector<std::string>::iterator it = std::find(p2cards.begin(), p2cards.end(), commands[i]);
+						if (it != p2cards.end()) {
+							p2cards.erase(it);
+							std::cout << commands[i] << " has been removed from player2's cards." << std::endl;
 						} else {
-							std::cout << "'" << commands[i] << "' isn't a valid card." << std::endl;
+							std::cout << "Player2 doesn't have any " << commands[i] << " cards." << std::endl;
 						}
+					} else {
+						std::cout << "'" << commands[i] << "' isn't a valid card." << std::endl;
 					}
 				}
 			} else if (commands[0] == "set") {

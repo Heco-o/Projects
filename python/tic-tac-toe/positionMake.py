@@ -230,9 +230,9 @@ for position1, list1 in positions.items():
 		positions[position1][0] = 0
 	elif 1 in state1:
 		positions[position1][0] = 1
-	print(positions[position1][0])
+	print(positions[position1][0], end=", ", flush=True)
 
-print(f"xWin: {xWin}, oWin: {oWin}, draw: {draw}")
+print(f"\nxWin: {xWin}, oWin: {oWin}, draw: {draw}")
 
 js = json.dumps(positions)
 with open("games.json", "w") as file:

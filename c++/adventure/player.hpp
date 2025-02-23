@@ -2,24 +2,37 @@
 #define PLAYER_HPP
 
 #include <vector>
+#include <string>
+#include <limits>
+#include <optional>
 
 struct Attribute {
 	double value;
-	double max = 0;
+	std::optional<double> min;
+	std::optional<double> max;
 	
-	Attribute(double value) : value(value) {}
-	Attribute(double value, double max) : value(value) {
-		if (value > max && max > 0) {
-			this->value = max;
+	Attribute(double value, std::optional<double> max = std::nullopt, std::optional<double> min = 0) : value(value), min(min), max(max) {
+		if (max.has_value() && min.has_value()) {
+			if (min.value() > max.value()) {
+				this->max = min.value();
+			} if (value > max.value()) {
+				this->value = max.value();
+			} else if (value < min.value()) {
+				this->value = min.value();
+			}
+		} else if (max.has_value() && value > max.value()) {
+			this->value = max.value();
+		} else if (min.has_value() && value < min.value()) {
+			this->value = min.value();
 		}
 	}
 	
 	template<typename T>
 	Attribute& operator+(T value) {
 		value = static_cast<double>(value);
-		if (max > 0) {
-			if (this->value + value > max) {
-				this->value = max;
+		if (max.has_value()) {
+			if (this->value + value > max.value()) {
+				this->value = max.value();
 			} else {
 				this->value += value;
 			}
@@ -32,8 +45,12 @@ struct Attribute {
 	template<typename T>
 	Attribute& operator-(T value) {
 		value = static_cast<double>(value);
-		if (this->value - value < 0) {
-			this->value = 0;
+		if (min.has_value()) {
+			if (this->value - value < min.value()) {
+				this->value = min.value();
+			} else {
+				this->value -= value;
+			}
 		} else {
 			this->value -= value;
 		}
@@ -43,10 +60,26 @@ struct Attribute {
 	template<typename T>
 	Attribute& operator=(T value) {
 		value = static_cast<double>(value);
-		if (value > max && max > 0) {
-			this->value = max;
-		} else if (value < 0) {
-			this->value = 0;
+		if (max.has_value() && min.has_value()) {
+			if (value > max.value()) {
+				this->value = max.value();
+			} else if (value < min.value()) {
+				this->value = min.value();
+			} else {
+				this->value = value;
+			}
+		} else if (max.has_value()) {
+			if (value > max.value()) {
+				this->value = max.value();
+			} else {
+				this->value = value;
+			}
+		} else if (min.has_value()) {
+			if (value < min.value()) {
+				this->value = min.value();
+			} else {
+				this->value = value;
+			}
 		} else {
 			this->value = value;
 		}
@@ -57,6 +90,7 @@ struct Attribute {
 		return value;
 	}
 };
+
 struct Inventory {
 	int capacity;
 	std::vector<Item> inv;
@@ -64,7 +98,9 @@ struct Inventory {
 	Inventory(int capacity) : capacity(capacity) {}
 	
 	void add(Item item) {
-		inv.push_back(item);
+		if (inv.size() < capacity) {
+			inv.push_back(item);
+		}
 	}
 };
 
